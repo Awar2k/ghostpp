@@ -782,7 +782,7 @@ bool CGame :: EventPlayerBotCommand( CGamePlayer *player, string command, string
 						{
 							unsigned char SID = (unsigned char)( Slot - 1 );
 
-							if( !( m_Map->GetMapOptions( ) & MAPOPT_FIXEDPLAYERSETTINGS ) && Colour < 12 && SID < m_Slots.size( ) )
+							if( !( m_Map->GetMapOptions( ) & MAPOPT_FIXEDPLAYERSETTINGS ) && Colour < MAX_SLOTS && SID < m_Slots.size( ) )
 							{
 								if( m_Slots[SID].GetSlotStatus( ) == SLOTSTATUS_OCCUPIED && m_Slots[SID].GetComputer( ) == 1 )
 									ColourSlot( SID, Colour );
@@ -936,7 +936,7 @@ bool CGame :: EventPlayerBotCommand( CGamePlayer *player, string command, string
 						{
 							unsigned char SID = (unsigned char)( Slot - 1 );
 
-							if( !( m_Map->GetMapOptions( ) & MAPOPT_FIXEDPLAYERSETTINGS ) && Team < 12 && SID < m_Slots.size( ) )
+							if( !( m_Map->GetMapOptions( ) & MAPOPT_FIXEDPLAYERSETTINGS ) && Team < MAX_SLOTS && SID < m_Slots.size( ) )
 							{
 								if( m_Slots[SID].GetSlotStatus( ) == SLOTSTATUS_OCCUPIED && m_Slots[SID].GetComputer( ) == 1 )
 								{
@@ -1503,14 +1503,14 @@ bool CGame :: EventPlayerBotCommand( CGamePlayer *player, string command, string
 
 					uint32_t FixedHostCounter = m_HostCounter & 0x0FFFFFFF;
 
-					// we send 12 for SlotsTotal because this determines how many PID's Warcraft 3 allocates
-					// we need to make sure Warcraft 3 allocates at least SlotsTotal + 1 but at most 12 PID's
-					// this is because we need an extra PID for the virtual host player (but we always delete the virtual host player when the 12th person joins)
+					// we send MAX_SLOTS for SlotsTotal because this determines how many PID's Warcraft 3 allocates
+					// we need to make sure Warcraft 3 allocates at least SlotsTotal + 1 but at most MAX_SLOTS PID's
+					// this is because we need an extra PID for the virtual host player (but we always delete the virtual host player when the MAX_SLOTSth person joins)
 					// however, we can't send 13 for SlotsTotal because this causes Warcraft 3 to crash when sharing control of units
-					// nor can we send SlotsTotal because then Warcraft 3 crashes when playing maps with less than 12 PID's (because of the virtual host player taking an extra PID)
-					// we also send 12 for SlotsOpen because Warcraft 3 assumes there's always at least one player in the game (the host)
+					// nor can we send SlotsTotal because then Warcraft 3 crashes when playing maps with less than MAX_SLOTS PID's (because of the virtual host player taking an extra PID)
+					// we also send MAX_SLOTS for SlotsOpen because Warcraft 3 assumes there's always at least one player in the game (the host)
 					// so if we try to send accurate numbers it'll always be off by one and results in Warcraft 3 assuming the game is full when it still needs one more player
-					// the easiest solution is to simply send 12 for both so the game will always show up as (1/12) players
+					// the easiest solution is to simply send MAX_SLOTS for both so the game will always show up as (1/MAX_SLOTS) players
 
 					if( m_SaveGame )
 					{
