@@ -36,6 +36,8 @@
 #define SLOTCOMP_NORMAL		1
 #define SLOTCOMP_HARD		2
 
+cont int MAX_SLOTS = 24;
+
 //
 // CGameSlot
 //
